@@ -3,17 +3,19 @@ using Aspose.Pdf.Text;
 namespace LangChain.Sources;
 
 /// <summary>
-/// 
+///
 /// </summary>
 public class PdfSource : ISource
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public required string Path { get; init; }
 
     /// <inheritdoc/>
-    public Task<IReadOnlyCollection<Document>> LoadAsync(CancellationToken cancellationToken = default)
+    public Task<IReadOnlyCollection<Document>> LoadAsync(
+        CancellationToken cancellationToken = default
+    )
     {
         try
         {
@@ -21,10 +23,7 @@ public class PdfSource : ISource
             var textAbsorber = new TextAbsorber();
             pdfDocument.Pages.Accept(textAbsorber);
 
-            var documents = (Document.Empty with
-            {
-                Content = textAbsorber.Text,
-            }).AsArray();
+            var documents = (Document.Empty with { PageContent = textAbsorber.Text, }).AsArray();
 
             return Task.FromResult(documents);
         }
